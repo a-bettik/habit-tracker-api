@@ -1,6 +1,6 @@
-# system deps
 FROM php:8.3-fpm
 
+# system deps
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -9,13 +9,25 @@ RUN apt-get update && apt-get install -y \
     zip \
     && docker-php-ext-install pdo pdo_pgsql zip
 
-# install composer
+# composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# copy project
+# working dir
+WORKDIR /var/www/html
+
+# copy composer files first (for caching)
+COPY composer.json composer.lock ./
+
+# install dependencies
+RUN composer install --no-interaction --prefer-dist --no-scripts
+
+# copy project AFTER dependencies
 COPY . .
 
-RUN composer install
+RUN composer dump-autoload --optimize
+
+# PHP config
+COPY ./docker/php/conf.d /usr/local/etc/php/conf.d/
 
 EXPOSE 9000
 

@@ -1,0 +1,13 @@
+api_platform:
+  title: Habit Tracker API
+  enable_swagger_ui: true
+  version: 1.0.0
+  show_webby: false
+  defaults:
+    stateless: true
+    cache_headers:
+      vary: ["Content-Type", "Authorization", "Origin"]
+  formats:
+    jsonld: ["application/ld+json"]
+    json: ["application/json"]
+    html: ["text/html"]

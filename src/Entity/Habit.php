@@ -2,12 +2,21 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use App\DTO\Habit\HabitInput;
+use App\DTO\Habit\HabitOutput;
 use App\Repository\HabitRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HabitRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    input: HabitInput::class,
+    output: HabitOutput::class,
+    processor: HabitOutput::class,
+)]
+
 class Habit
 {
     #[ORM\Id]
@@ -75,9 +84,7 @@ class Habit
     public function prePersist(): void
     {
         $now = new DateTimeImmutable();
-        if ($this->createdAt === null) {
-            $this->createdAt = $now;
-        }
+        $this->createdAt = $now;
         $this->updatedAt = $now;
     }
 

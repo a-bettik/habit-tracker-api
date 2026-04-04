@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO\Habit;
+namespace App\Api\Habit\DTO;
 use DateTimeImmutable;
 
 final class HabitOutput

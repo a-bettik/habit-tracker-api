@@ -21,6 +21,10 @@ COPY composer.json composer.lock ./
 # install dependencies
 RUN composer install --no-interaction --prefer-dist --no-scripts
 
+# install XDebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 # copy project AFTER dependencies
 COPY . .
 

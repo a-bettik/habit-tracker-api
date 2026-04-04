@@ -10,6 +10,9 @@ services:
       - db
     environment:
       DATABASE_URL: postgresql://symfony:symfony@db:5432/habits
+      PHP_IDE_CONFIG: "serverName=localhost"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   nginx:
     image: nginx:alpine

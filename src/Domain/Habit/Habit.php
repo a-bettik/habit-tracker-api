@@ -3,11 +3,15 @@
 namespace App\Domain\Habit;
 
 use DateTimeImmutable;
+use Symfony\Component\Uid\Uuid;
 
 final class Habit
 {
+    /** @var HabitLog[] */
+    private array $habitLogs = [];
+
     private function __construct(
-        private ?int $id,
+        private Uuid $id,
         private string $label,
         private Period $period,
         private int $targetCount,
@@ -23,34 +27,38 @@ final class Habit
         $now = new DateTimeImmutable();
 
         return new self(
-            null,
+            Uuid::v4(),
             $label,
             $period,
             $targetCount,
             $now,
-            $now
+            $now,
+            []
         );
     }
 
     public static function fromPersistence(
-        int $id,
+        Uuid $id,
         string $label,
         Period $period,
         int $targetCount,
         DateTimeImmutable $createdAt,
         DateTimeImmutable $updatedAt,
+        array $habitLogs = [],
     ): self {
-        return new self(
+        $habit = new self(
             $id,
             $label,
             $period,
             $targetCount,
             $createdAt,
-            $updatedAt
+            $updatedAt,
         );
+        $habit->habitLogs = [];
+        return $habit;
     }
 
-    public function complete(DateTimeImmutable $date): static
+    public function complete(DateTimeImmutable $date): self
     {
         if ($this->isCompletedOn($date)) {
             throw new \DomainException('Habit is already completed for this day.');
@@ -71,7 +79,7 @@ final class Habit
         return false;
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -101,5 +109,9 @@ final class Habit
         return $this->updatedAt;
     }
 
+    public function getHabitLogs(): array
+    {
+        return $this->habitLogs;
+    }
 
 }

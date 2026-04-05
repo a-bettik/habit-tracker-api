@@ -2,9 +2,11 @@
 
 namespace App\Domain\Habit;
 
+use Symfony\Component\Uid\Uuid;
+
 interface HabitRepository
 {
     public function save(Habit $habit): void;
 
-    public function get(int $id): ?Habit;
+    public function get(Uuid $id): ?Habit;
 }

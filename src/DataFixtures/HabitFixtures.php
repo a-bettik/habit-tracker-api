@@ -2,9 +2,12 @@
 
 namespace App\DataFixtures;
 
+use App\Application\Habit\CreateHabit;
+use App\Domain\Habit\HabitRepository;
 use App\Domain\Habit\Period;
 use App\Infrastructure\Doctrine\Entity\HabitEntity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class HabitFixtures extends Fixture
@@ -14,68 +17,25 @@ class HabitFixtures extends Fixture
     public const HABIT_EXERCISE = 'exercise';
     public const HABIT_READ_MY_BOOK = 'read_my_book';
     public const HABIT_WORK_ON_MY_SIDE_PROJECT = 'work_on_my_side_project';
-    public const HABITS = [
-        self::HABIT_DRINK_WATER,
-        self::HABIT_MEDITATE,
-        self::HABIT_EXERCISE,
-        self::HABIT_READ_MY_BOOK,
-        self::HABIT_WORK_ON_MY_SIDE_PROJECT,
-    ];
+
+    public function __construct(
+        private CreateHabit $createHabit,
+        private HabitRepository $habitRepository,
+    ) {}
 
     public function load(ObjectManager $manager): void
     {
-        // Drink water every day
-        $habit1 = new HabitEntity();
-        $habit1
-            ->setLabel('Drink water')
-            ->setPeriod(Period::Daily->value)
-            ->setTargetCount(1)
-        ;
-        $this->addReference(self::HABIT_DRINK_WATER, $habit1);
+        $habits = [
+            self::HABIT_DRINK_WATER             => $this->createHabit->execute('Drink water', Period::Daily, 1),
+            self::HABIT_MEDITATE                => $this->createHabit->execute('Meditate', Period::Daily, 1),
+            self::HABIT_EXERCISE                => $this->createHabit->execute('Exercise', Period::Weekly, 1),
+            self::HABIT_READ_MY_BOOK            => $this->createHabit->execute('Read my book', Period::Weekly, 2),
+            self::HABIT_WORK_ON_MY_SIDE_PROJECT => $this->createHabit->execute('Work on my side project', Period::Monthly, 6),
+        ];
 
-        // Meditate every day
-        $habit2 = new HabitEntity();
-        $habit2
-            ->setLabel('Meditate')
-            ->setPeriod(Period::Daily->value)
-            ->setTargetCount(1)
-        ;
-        $this->addReference(self::HABIT_MEDITATE, $habit2);
-
-        // Exercise weekly
-        $habit3 = new HabitEntity();
-        $habit3
-            ->setLabel('Exercise')
-            ->setPeriod(Period::Weekly->value)
-            ->setTargetCount(1)
-        ;
-        $this->addReference(self::HABIT_EXERCISE, $habit3);
-
-        // Ready my book twice a week
-        $habit4 = new HabitEntity();
-        $habit4
-            ->setLabel('Read my book')
-            ->setPeriod(Period::Weekly->value)
-            ->setTargetCount(2)
-        ;
-        $this->addReference(self::HABIT_READ_MY_BOOK, $habit4);
-
-        // Work on my project six times a month
-        $habit5 = new HabitEntity();
-        $habit5
-            ->setLabel('Work on my side project')
-            ->setPeriod(Period::Monthly->value)
-            ->setTargetCount(6)
-        ;
-        $this->addReference(self::HABIT_WORK_ON_MY_SIDE_PROJECT, $habit5);
-
-        $manager->persist($habit1);
-        $manager->persist($habit2);
-        $manager->persist($habit3);
-        $manager->persist($habit4);
-        $manager->persist($habit5);
-
-        $manager->flush();
+        foreach ($habits as $reference => $habit) {
+            $entity = $manager->find(HabitEntity::class, $habit->getId()->toString());
+            $this->addReference($reference, $entity);
+        }
     }
 }
-

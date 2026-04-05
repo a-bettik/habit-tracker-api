@@ -7,6 +7,11 @@ final class HabitLog
         private \DateTimeImmutable $date,
     ) {}
 
+    public function getDate(): \DateTimeImmutable
+    {
+        return $this->date;
+    }
+
     public function isSameDay(\DateTimeImmutable $date): bool
     {
         return $this->date->format('Y-m-d') === $date->format('Y-m-d');

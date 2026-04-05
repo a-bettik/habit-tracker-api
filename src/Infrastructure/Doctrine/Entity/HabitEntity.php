@@ -6,15 +6,16 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: "habit")]
 class HabitEntity
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
     private string $label;
@@ -34,22 +35,17 @@ class HabitEntity
     #[ORM\OneToMany(mappedBy: 'habit', targetEntity: HabitLogEntity::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $habitLogs;
 
-    public function __construct()
+    public function __construct(Uuid $id)
     {
+        $this->id = $id;
         $this->habitLogs = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
-    }
-
-    public function setId(?int $id): HabitEntity
-    {
-        $this->id = $id;
-        return $this;
     }
 
     public function getLabel(): string

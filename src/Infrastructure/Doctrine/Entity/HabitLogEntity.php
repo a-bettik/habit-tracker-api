@@ -4,6 +4,7 @@ namespace App\Infrastructure\Doctrine\Entity;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: "habit_log")]
@@ -11,9 +12,9 @@ class HabitLogEntity
 {
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private Uuid $id;
 
     #[ORM\Column]
     private ?DateTimeImmutable $date = null;
@@ -24,11 +25,12 @@ class HabitLogEntity
 
     public function __construct(HabitEntity $habit, DateTimeImmutable $date)
     {
+        $this->id = Uuid::v4();
         $this->habit = $habit;
         $this->date = $date;
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }

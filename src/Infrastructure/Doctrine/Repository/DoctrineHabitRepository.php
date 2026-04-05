@@ -39,4 +39,11 @@ class DoctrineHabitRepository implements HabitRepository
         $entity = $this->entityManager->find(HabitEntity::class, $id);
         return $entity ? $this->mapper->toDomain($entity) : null;
     }
+
+    /** @return Habit[] */
+    public function findAll(): array
+    {
+        $entities = $this->entityManager->getRepository(HabitEntity::class)->findAll();
+        return array_map(fn(HabitEntity $entity) => $this->mapper->toDomain($entity), $entities);
+    }
 }

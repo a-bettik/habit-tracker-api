@@ -4,9 +4,10 @@ namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Api\Habit\DTO\HabitInput;
 use App\Application\Habit\CreateHabit;
 use App\Domain\Habit\Period;
+use App\Interface\Habit\DTO\HabitInput;
+use App\Interface\Habit\DTO\HabitOutput;
 
 final class HabitProcessor implements ProcessorInterface
 {
@@ -17,10 +18,12 @@ final class HabitProcessor implements ProcessorInterface
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         /** @var HabitInput $data */
-        return $this->createHabit->execute(
+        $habit = $this->createHabit->execute(
             $data->label,
             Period::from($data->period),
             $data->targetCount
         );
+
+        return HabitOutput::fromDomain($habit);
     }
 }

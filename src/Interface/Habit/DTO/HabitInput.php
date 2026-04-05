@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Habit\DTO;
+namespace App\Interface\Habit\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

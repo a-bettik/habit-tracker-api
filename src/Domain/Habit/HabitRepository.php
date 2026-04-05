@@ -9,4 +9,7 @@ interface HabitRepository
     public function save(Habit $habit): void;
 
     public function get(Uuid $id): ?Habit;
+
+    /** @return Habit[] */
+    public function findAll(): array;
 }

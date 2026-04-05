@@ -16,7 +16,7 @@ class CompleteHabit
     {
         $habit = $this->habitRepository->get($id);
         if ($habit === null) {
-            throw new \DomainException('Habit not found: {$id}');
+            throw new \RuntimeException("Habit not found: {$id}");
         }
 
         $habit->complete($date);

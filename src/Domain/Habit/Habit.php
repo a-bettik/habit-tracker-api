@@ -37,6 +37,28 @@ final class Habit
         );
     }
 
+    public function update(
+        string $label = null,
+        Period $period = null,
+        int $targetCount = null,
+    ): self
+    {
+        if ($label || $period || $targetCount) {
+            if ($label) {
+                $this->label = $label;
+            }
+            if ($period) {
+                $this->period = $period;
+            }
+            if ($targetCount) {
+                $this->targetCount = $targetCount;
+            }
+            $this->updatedAt = new DateTimeImmutable();
+        }
+
+        return $this;
+    }
+
     public static function fromPersistence(
         Uuid $id,
         string $label,

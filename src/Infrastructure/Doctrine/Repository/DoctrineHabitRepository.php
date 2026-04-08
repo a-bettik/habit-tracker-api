@@ -46,4 +46,11 @@ class DoctrineHabitRepository implements HabitRepository
         $entities = $this->entityManager->getRepository(HabitEntity::class)->findAll();
         return array_map(fn(HabitEntity $entity) => $this->mapper->toDomain($entity), $entities);
     }
+
+    public function delete(Habit $habit): void
+    {
+        $entity = $this->entityManager->find(HabitEntity::class, $habit->getId());
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
 }

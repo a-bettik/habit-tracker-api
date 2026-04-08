@@ -2,6 +2,8 @@
 
 namespace App\Interface\Habit\Provider;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Domain\Habit\HabitRepository;
@@ -16,15 +18,20 @@ class HabitProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): HabitOutput|null|array
     {
+        // If I got an id, load the Habit
         if (isset($uriVariables['id'])) {
             $habit = $this->habitRepository->get(Uuid::fromString($uriVariables['id']));
             return $habit ? HabitOutput::fromDomain($habit) : null;
         }
 
-        // In case of GetCollection
-        return array_map(
-            fn($habit) => HabitOutput::fromDomain($habit),
-            $this->habitRepository->findAll(),
-        );
+        // Else if GetCollection, get all
+        if ($operation instanceof GetCollection) {
+            return array_map(
+                fn($habit) => HabitOutput::fromDomain($habit),
+                $this->habitRepository->findAll(),
+            );
+        }
+
+        return null;
     }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Interface\Habit\Processor;
 
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use App\Application\Habit\CreateHabit;
+use App\Application\Habit\DeleteHabit;
 use App\Application\Habit\UpdateHabit;
 use App\Domain\Habit\Period;
 use App\Interface\Habit\DTO\HabitInput;
@@ -19,6 +21,7 @@ final class HabitProcessor implements ProcessorInterface
     public function __construct(
         private CreateHabit $createHabit,
         private UpdateHabit $updateHabit,
+        private DeleteHabit $deleteHabit,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
@@ -39,11 +42,14 @@ final class HabitProcessor implements ProcessorInterface
                 Period::from($data->period),
                 $data->targetCount
             );
-            } else {
-                throw new \RuntimeException("Unsupported operation: {$operation->getName()}");
-            }
+        } elseif ($operation instanceof Delete) {
+            /** @var HabitOutput $data */
+            $this->deleteHabit->execute($data->id);
+            return null;
+        } else {
+            throw new \RuntimeException("Unsupported operation: {$operation->getName()}");
+        }
 
-
-            return HabitOutput::fromDomain($habit);
+        return HabitOutput::fromDomain($habit);
     }
 }

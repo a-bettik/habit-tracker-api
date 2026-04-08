@@ -12,4 +12,6 @@ interface HabitRepository
 
     /** @return Habit[] */
     public function findAll(): array;
+
+    public function delete(Habit $habit): void;
 }

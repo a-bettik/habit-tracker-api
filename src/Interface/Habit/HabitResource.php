@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Interface\Habit\DTO\HabitInput;
-use App\Interface\Habit\DTO\HabitOutput;
 use App\Interface\Habit\Processor\CompleteHabitProcessor;
 use App\Interface\Habit\Processor\HabitProcessor;
 use App\Interface\Habit\Provider\HabitProvider;
@@ -25,10 +24,10 @@ use Symfony\Component\Uid\Uuid;
             input: HabitInput::class,
             provider: null,
         ),
-        new Put(),
-        new Delete(
-            processor: HabitProcessor::class,
+        new Put(
+            input: HabitInput::class,
         ),
+        new Delete(),
         new Post(
             uriTemplate: '/habits/{id}/complete',
             input: false,
@@ -36,8 +35,6 @@ use Symfony\Component\Uid\Uuid;
             processor: CompleteHabitProcessor::class,
         ),
     ],
-    input: HabitInput::class,
-    output: HabitOutput::class,
     provider: HabitProvider::class,
     processor: HabitProcessor::class,
 )]

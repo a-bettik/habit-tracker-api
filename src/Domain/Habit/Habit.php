@@ -43,7 +43,7 @@ final class Habit
         int $targetCount = null,
     ): self
     {
-        if ($label || $period || $targetCount) {
+        if ($label !== null || $period !== null || $targetCount !== null) {
             if ($label) {
                 $this->label = $label;
             }

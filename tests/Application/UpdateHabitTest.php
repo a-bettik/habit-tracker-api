@@ -9,6 +9,7 @@ use App\Domain\Habit\HabitRepository;
 use App\Domain\Habit\Period;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Component\Uid\Uuid;
 
 class UpdateHabitTest extends TestCase
 {
@@ -67,5 +68,25 @@ class UpdateHabitTest extends TestCase
         $this->assertSame('New habit label', $loadedHabit->getLabel());
         $this->assertSame(Period::Daily, $loadedHabit->getPeriod());
         $this->assertSame(1, $loadedHabit->getTargetCount());
+    }
+
+    #[Test]
+    public function it_does_not_update_if_habit_not_found()
+    {
+        $habitRepository = $this->getMockHabitRepository();
+
+        $habitRepository
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn(null);
+
+        $habitRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->expectException(\RuntimeException::class);
+
+        $useCase = new UpdateHabit($habitRepository);
+        $useCase->execute(Uuid::v4(), 'New label');
     }
 }

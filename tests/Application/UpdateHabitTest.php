@@ -2,7 +2,6 @@
 
 namespace App\Tests\Application;
 
-use App\Application\Habit\CreateHabit;
 use App\Application\Habit\UpdateHabit;
 use App\Domain\Habit\Habit;
 use App\Domain\Habit\HabitRepository;

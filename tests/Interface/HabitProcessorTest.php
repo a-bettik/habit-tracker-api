@@ -132,7 +132,7 @@ class HabitProcessorTest extends TestCase
     }
 
     #[Test]
-    public function it_does_not_accept_other_operations()
+    public function it_throws_exception_when_using_other_operation()
     {
         $createHabit = $this->createMock(CreateHabit::class);
         $updateHabit = $this->createMock(UpdateHabit::class);

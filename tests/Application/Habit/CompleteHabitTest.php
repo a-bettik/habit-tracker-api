@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Application;
+namespace App\Tests\Application\Habit;
 
 use App\Application\Habit\CompleteHabit;
 use App\Domain\Habit\Habit;

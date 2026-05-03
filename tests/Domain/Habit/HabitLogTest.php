@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Domain;
+namespace App\Tests\Domain\Habit;
 
 use App\Domain\Habit\Habit;
 use App\Domain\Habit\HabitLog;

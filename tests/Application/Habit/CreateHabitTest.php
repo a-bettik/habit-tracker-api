@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Application;
+namespace App\Tests\Application\Habit;
 
 use App\Application\Habit\CreateHabit;
 use App\Domain\Habit\Habit;
 use App\Domain\Habit\HabitRepository;
 use App\Domain\Habit\Period;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 
 class CreateHabitTest extends TestCase
 {

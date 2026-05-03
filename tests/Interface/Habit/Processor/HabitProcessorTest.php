@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Interface;
+namespace App\Tests\Interface\Habit\Processor;
 
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
@@ -14,8 +14,8 @@ use App\Domain\Habit\Period;
 use App\Interface\Habit\DTO\HabitInput;
 use App\Interface\Habit\DTO\HabitOutput;
 use App\Interface\Habit\Processor\HabitProcessor;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 
 class HabitProcessorTest extends TestCase
 {

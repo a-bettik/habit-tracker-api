@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Provider;
+namespace App\Tests\Interface\Habit\Provider;
 
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -9,8 +9,8 @@ use App\Domain\Habit\HabitRepository;
 use App\Domain\Habit\Period;
 use App\Interface\Habit\DTO\HabitOutput;
 use App\Interface\Habit\Provider\HabitProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 
 class HabitProviderTest extends TestCase

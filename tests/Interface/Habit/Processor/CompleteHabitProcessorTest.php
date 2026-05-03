@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Interface;
+namespace App\Tests\Interface\Habit\Processor;
 
 use ApiPlatform\Metadata\Post;
 use App\Application\Habit\CompleteHabit;
@@ -9,9 +9,8 @@ use App\Domain\Habit\Period;
 use App\Interface\Habit\DTO\HabitOutput;
 use App\Interface\Habit\Processor\CompleteHabitProcessor;
 use DateTimeImmutable;
-use http\Exception\RuntimeException;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
 

@@ -33,10 +33,6 @@
         <testsuite name="Infrastructure">
             <directory>tests/Infrastructure</directory>
         </testsuite>
-
-        <testsuite name="Provider">
-            <directory>tests/Provider</directory>
-        </testsuite>
     </testsuites>
 
     <source ignoreSuppressionOfDeprecations="true"

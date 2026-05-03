@@ -2,6 +2,8 @@
 
 namespace App\Tests\Interface;
 
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Application\Habit\CreateHabit;
@@ -98,5 +100,61 @@ class HabitProcessorTest extends TestCase
         $result = $habitProcessor->process($habitInput, new Put(), $uriVariables);
 
         $this->assertInstanceOf(HabitOutput::class, $result);
+    }
+
+    #[Test]
+    public function it_deletes_habit()
+    {
+        $createHabit = $this->createMock(CreateHabit::class);
+        $updateHabit = $this->createMock(UpdateHabit::class);
+        $deleteHabit = $this->createMock(DeleteHabit::class);
+
+        $habitProcessor = new HabitProcessor($createHabit, $updateHabit, $deleteHabit);
+
+        $habit = Habit::create('A habit to deleted', Period::Daily, 1);
+        $habitOutput = HabitOutput::fromDomain($habit);
+
+        $createHabit
+            ->expects($this->never())
+            ->method('execute');
+        $updateHabit
+            ->expects($this->never())
+            ->method('execute');
+        $deleteHabit
+            ->expects($this->once())
+            ->method('execute')
+            ->with($habitOutput->id);
+
+        // Act
+        $result = $habitProcessor->process($habitOutput, new Delete());
+
+        $this->assertNull($result);
+    }
+
+    #[Test]
+    public function it_does_not_accept_other_operations()
+    {
+        $createHabit = $this->createMock(CreateHabit::class);
+        $updateHabit = $this->createMock(UpdateHabit::class);
+        $deleteHabit = $this->createMock(DeleteHabit::class);
+
+        $habitProcessor = new HabitProcessor($createHabit, $updateHabit, $deleteHabit);
+
+        $createHabit
+            ->expects($this->never())
+            ->method('execute');
+        $updateHabit
+            ->expects($this->never())
+            ->method('execute');
+        $deleteHabit
+            ->expects($this->never())
+            ->method('execute');
+
+        $getCollectionOperation = new GetCollection();
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unsupported operation: ' . $getCollectionOperation->getName());
+
+        // Act
+        $habitProcessor->process([], $getCollectionOperation);
     }
 }
